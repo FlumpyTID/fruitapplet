@@ -415,7 +415,7 @@ export default function EllipticCurveChordTangentVisualizer() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 p-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 xl:grid-cols-[1.35fr_0.9fr] gap-6">
+      <div className="max-w-7xl mx-auto">
         <div className="bg-white rounded-2xl shadow-sm border p-4">
           <div className="flex items-center justify-between mb-3 gap-3">
             <div>
@@ -556,37 +556,6 @@ export default function EllipticCurveChordTangentVisualizer() {
             <button onClick={() => setStepIndex(0)} className="px-4 py-2 rounded-xl border shadow-sm">
               Reset
             </button>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-sm border p-5">
-          <div className="mb-4">
-            <div className="text-sm uppercase tracking-wide text-slate-500 mb-1">Current step</div>
-            <h2 className="text-xl font-semibold">{step.title}</h2>
-            <p className="text-sm text-slate-600 mt-2 leading-6">{step.description}</p>
-          </div>
-
-          <div className="space-y-3 max-h-[420px] overflow-auto pr-1">
-            {step.points.map((pt) => (
-              <div key={`card-${pt.label}-${pt.x}-${pt.y}`} className="rounded-2xl border p-3 bg-slate-50">
-                <div className={`text-sm font-semibold ${pointColor(pt.kind)}`}>{pt.label}</div>
-                <div className="text-sm mt-1 break-all">
-                  <CoordinatePair x={pt.x} y={pt.y} />
-                </div>
-                <div className="text-xs text-slate-500 mt-1">
-                  Approximation: ({pt.xNum.toFixed(6)}, {pt.yNum.toFixed(6)})
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-5 rounded-2xl border p-4 bg-slate-50">
-            <div className="text-sm font-semibold mb-2">Notes</div>
-            <ul className="text-sm text-slate-600 space-y-2 list-disc pl-5">
-              <li>This version is hard-coded through 9P, using exact coordinates computed on the cubic itself.</li>
-              <li>The first step uses the actual tangent slope at P, namely 134/503.</li>
-              <li>The picture shows the real locus only, with exact coordinates displayed next to the highlighted points.</li>
-            </ul>
           </div>
         </div>
       </div>
