@@ -303,6 +303,7 @@ export default function EllipticCurveChordTangentVisualizer() {
   const [panelPos, setPanelPos] = React.useState({ x: 10, y: 10 });
   const [panelExpanded, setPanelExpanded] = React.useState(true);
   const [dragging, setDragging] = React.useState(false);
+  const [isFullscreen, setIsFullscreen] = React.useState(false);
   const dragOffsetRef = React.useRef({ x: 0, y: 0 });
   const step = steps[stepIndex];
 
@@ -414,21 +415,30 @@ export default function EllipticCurveChordTangentVisualizer() {
   }, [clampPanelPosition, dragging]);
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-sm border p-4">
-          <div className="flex items-center justify-between mb-3 gap-3">
-            <div>
+    <div className={`${isFullscreen ? "fixed inset-0 overflow-hidden" : "min-h-screen"} bg-white text-slate-900 ${isFullscreen ? "p-0" : "p-6"}`}>
+      <div className={`${isFullscreen ? "w-full h-full" : "max-w-7xl mx-auto"}`}>
+        <div className={`bg-white ${isFullscreen ? "rounded-none shadow-none border-0 p-2 h-full flex flex-col" : "rounded-2xl shadow-sm border p-4"}`}>
+          <div className={`flex items-center justify-between gap-3 ${isFullscreen ? "mb-0" : "mb-3"}`}>
+            <div className={`${isFullscreen ? "hidden" : ""}`}>
               <h1 className="text-2xl font-semibold tracking-tight">Chord–tangent visualization on the cubic</h1>
               <p className="text-sm text-slate-600 mt-1">
                 Curve: <span className="font-mono">x^3 + y^3 + xy + 1 = 3(x+y)(x+1)(y+1)</span>
               </p>
             </div>
-            <div className="text-sm text-slate-500">Step {stepIndex + 1} of {steps.length}</div>
+            <div className="flex items-center gap-3">
+              <div className={`text-sm text-slate-500 ${isFullscreen ? "hidden" : ""}`}>Step {stepIndex + 1} of {steps.length}</div>
+              <button
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                className="px-3 py-2 rounded-xl border shadow-sm hover:bg-slate-50"
+              >
+                {isFullscreen ? "✕" : "⛶"}
+              </button>
+            </div>
           </div>
 
-          <div className="rounded-2xl border overflow-hidden bg-slate-50">
-            <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto block">
+          <div className={`rounded-2xl border overflow-hidden bg-slate-50 ${isFullscreen ? "flex-1 rounded-none border-0" : ""}`}>
+            <svg viewBox={`0 0 ${width} ${height}`} className={`${isFullscreen ? "w-full h-full" : "w-full h-auto"} block`}>
               <rect x="0" y="0" width={width} height={height} fill="#f8fafc" />
 
               <line x1={xToPx(0)} y1={yToPx(world.ymin)} x2={xToPx(0)} y2={yToPx(world.ymax)} stroke="currentColor" strokeOpacity="0.2" />
@@ -546,14 +556,14 @@ export default function EllipticCurveChordTangentVisualizer() {
             </svg>
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-3">
+          <div className={`${isFullscreen ? "fixed bottom-4 left-4 right-4 flex flex-wrap gap-3 bg-white p-4 rounded-xl shadow-lg border" : "mt-4 flex flex-wrap gap-3"}`}>
             <button onClick={() => setStepIndex((s) => Math.max(0, s - 1))} disabled={stepIndex === 0} className="px-4 py-2 rounded-xl border shadow-sm disabled:opacity-40">
               Previous step
             </button>
             <button onClick={() => setStepIndex((s) => Math.min(steps.length - 1, s + 1))} disabled={stepIndex === steps.length - 1} className="px-4 py-2 rounded-xl border shadow-sm disabled:opacity-40">
               Next step
             </button>
-            <button onClick={() => setStepIndex(0)} className="px-4 py-2 rounded-xl border shadow-sm">
+            <button onClick={() => setStepIndex(0)} className={`px-4 py-2 rounded-xl border shadow-sm ${isFullscreen ? "hidden" : ""}`}>
               Reset
             </button>
           </div>
